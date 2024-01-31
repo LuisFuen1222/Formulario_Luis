@@ -19,7 +19,7 @@
         <br> <br>
         <div>
           <label>Edad:</label>
-          <input type="number" v-model="edad" min="0" max="60" :class="{ 'campo-invalido': errores.edad }">
+          <input type="number" v-model="edad" :class="{ 'campo-invalido': errores.edad }">
           <p v-if="errores.edad" class="mensaje-error">{{ errores.edad }}</p>
         </div>
         <br> <br>
@@ -48,77 +48,64 @@
     </div>
   </template>
   
-  <script>
-  import { ref, reactive } from 'vue';
-
-  export default {
-    setup() {
-      const nombre = ref('');
+  <script setup  lang="ts">
+  import { ref } from 'vue';
+  const nombre = ref('');
       const apellido = ref('');
-      const edad = ref('');
+      const edad = ref();
       const genero = ref('');
       const telefono = ref('');
-      const errores = reactive({});
+      const errores = ref({});
 
-      return {
-        nombre,
-        apellido,
-        edad,
-        genero,
-        telefono,
-        errores
-      }
-    },
-    methods: {
-      validarFormulario() {
-        this.errores = {};
+
+        const  validarFormulario = () => {
+        errores.value = {};
         let esValido = true;
-        let palabrasApellido = this.apellido.toLowerCase().split(' ');
-        let nombres = this.nombre.toLowerCase().split(' ');
+        let palabrasApellido = apellido.value.toLowerCase().split(' ');
+        let nombres = nombre.value.toLowerCase().split(' ');
   
-        if (!this.nombre || this.nombre.length > 18) {
-          this.errores.nombre = 'El nombre no puede tener más de 18 caracteres';
+    
+        if (nombre.value.length > 18) {
+          errores.value.nombre = 'El nombre no puede tener más de 18 caracteres';
           esValido = false;
         }
         
         for (let nombre of nombres) {
          if (palabrasApellido.includes(nombre)) {
-         this.errores.apellido = 'El apellido no puede repetirse en el campo nombres';
+         errores.value.apellido = 'El apellido no puede repetirse en el campo nombres';
          esValido = false;
          break;
          }
         } 
 
-        if (!this.telefono || this.telefono.length > 10) {
-          this.errores.telefono = 'El número de teléfono no puede tener más de 10 dígitos';
+        if (!telefono.value || telefono.value.length > 10) {
+          errores.value.telefono = 'El número de teléfono no puede tener más de 10 dígitos';
           esValido = false;
         }
   
-        if (!this.apellido || this.apellido.length > 18) {
-          this.errores.apellido = 'El apellido no puede tener más de 18 caracteres';
+        if (!apellido.value || apellido.value.length > 18) {
+          errores.value.apellido = 'El apellido no puede tener más de 18 caracteres';
           esValido = false;
         }
   
-        if (this.nombre === this.apellido) {
-          this.errores.nombre = 'El nombre y apellido no pueden ser iguales';
-          this.errores.apellido = 'El nombre y apellido no pueden ser iguales';
+        if (nombre.value === apellido.value) {
+          errores.value.nombre = 'El nombre y apellido no pueden ser iguales';
+          errores.value.apellido = 'El nombre y apellido no pueden ser iguales';
           esValido = false;
         }
   
-        if (!this.edad || this.edad < 0 || this.edad > 60) {
-          this.errores.edad = 'Selecciona tu edad, debe estar entre 0 y 60';
+        if (!edad.value || edad.value <= 0 || edad.value > 60) {
+          errores.value.edad = 'Selecciona tu edad, debe estar entre 0 y 60';
           esValido = false;
         }
   
-        if (!this.genero) {
-          this.errores.genero = 'Selecciona un genero';
+        if (!genero.value) {
+          errores.value.genero = 'Selecciona un genero';
           esValido = false;
         }
 
         return esValido;
       }
-    }
-  }
   </script>
   
   <style scoped>
