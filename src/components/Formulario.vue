@@ -49,15 +49,24 @@
   </template>
   
   <script>
+  import { ref, reactive } from 'vue';
+
   export default {
-    data() {
+    setup() {
+      const nombre = ref('');
+      const apellido = ref('');
+      const edad = ref('');
+      const genero = ref('');
+      const telefono = ref('');
+      const errores = reactive({});
+
       return {
-        nombre: '',
-        apellido: '',
-        edad: '',
-        genero: '',
-        telefono: '',
-        errores: {}
+        nombre,
+        apellido,
+        edad,
+        genero,
+        telefono,
+        errores
       }
     },
     methods: {
